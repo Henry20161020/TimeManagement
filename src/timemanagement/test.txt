@@ -1,0 +1,25 @@
+1|Sheridan|Daily routine|||Morning||
+2|investment(google finance)|Daily routine|||Morning||
+3|android development/machine learning/careerfoundry|Daily routine|||Morning||
+4|saving|Daily routine|||Afternoon||
+5|English|Daily routine|||Night||
+6|Family meeting|Daily routine|||Night||
+7|Physical excercise|Daily routine|||Night||
+8|civilization forum|Daily routine|||Night||
+9|slack activity|Daily routine|||Night||
+10|tax report|Daily routine|||Night||
+11|contact lense|Daily routine|||Night||44267
+12|gmail/one note/action list/Sheridan email/slate|Daily routine|||Night||
+13|Zen|Daily routine|||Night||
+14|politics quiz 3|Sheridan|20180404||||
+15|politics Case Study 2|Sheridan|20180411||||
+16|network quiz 4|Sheridan|20180404||||
+17|network A2|Sheridan|20180411||||
+18|network Act5|Sheridan|20180411||||
+19|java project|Sheridan|20180321||||making test dataset
+20|co-op application|Sheridan|20180426||||
+21|politics Case Study 1|Sheridan|20180323||||print
+22|Math. A4|Sheridan|20180325||||17 marks done
+23|network Act4|Sheridan|20180328||||
+24|politics Case Study 2|Sheridan|20180417||||
+25|revision|Sheridan|||||java, linux
