@@ -29,6 +29,31 @@ public class Task {
         this.taskFinshDate=finishDate;
         this.comments=comments;
     }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public String getTaskCategory() {
+        return taskCategory;
+    }
+
+    public String getTaskDueDate() {
+        return taskDueDate;
+    }
+
+    public String getTaskCoworker() {
+        return taskCoworker;
+    }
+
+    public String getTaskSituation() {
+        return taskSituation;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+    
     
     public String toString() {
     
