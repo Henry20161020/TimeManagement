@@ -21,10 +21,14 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import static timemanagement.FileController.readFile;
+import static timemanagement.FileController.writeFile;
 
 /**
  *
@@ -32,17 +36,27 @@ import static timemanagement.FileController.readFile;
  */
 public class FXMLDocumentController implements Initializable {
     
-    @FXML GridPane display_area, search_box;
-    @FXML Button display;
+    @FXML GridPane display_area, search_box, grid_input;
+    @FXML Button display,button_new,button_exit;
     @FXML ListView category_list;
 
     private File file=new File("test.txt");
     private ArrayList<Task> tasks=new ArrayList<>();
+    private ArrayList<Integer> indexes=new ArrayList<>();
 
     private void displayHeader(String[] h) {
         for (int i = 0; i < 6; i++) {
             display_area.add(new Label(h[i]),i,0);
         }
+    }
+    
+    private void displayLine(int taskNumber) {
+        display_area.add(new Label(tasks.get(taskNumber).getTaskDescription()),0,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskCategory()),1,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskDueDate()),2,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskCoworker()),3,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskSituation()),4,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getComments()),5,taskNumber+1);
     }
 //    private void updateList(ListView selectionList) {
 //        ArrayList<String> list = new ArrayList<>();
@@ -51,6 +65,17 @@ public class FXMLDocumentController implements Initializable {
 //                if (item.equals(task.))
 //        selectionList.getItems().addAll(list);
 //    }
+    
+    private String getContent(GridPane grid, int row, int col) {
+        System.out.println(grid.getChildren());
+        for(Node node: grid.getChildren()) {
+            System.out.println(node);
+            System.out.println(grid.getColumnIndex(node));
+            System.out.println(grid.getRowIndex(node));
+            if (node instanceof TextField && grid.getColumnIndex(node)==col && grid.getRowIndex(node)==row )
+                return ((TextField)node).getText();}
+        return "N/A";
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -68,15 +93,33 @@ public class FXMLDocumentController implements Initializable {
 //            if(search_box.getColumnIndex(node)==1) updateList((ListView)node);
 //        }
         display.setOnAction(e->{
-            for (int i = 0; i < tasks.size(); i++) {
-                display_area.add(new Label(tasks.get(i).getTaskDescription()),0,i+1);
-                display_area.add(new Label(tasks.get(i).getTaskCategory()),1,i+1);
-                display_area.add(new Label(tasks.get(i).getTaskDueDate()),2,i+1);
-                display_area.add(new Label(tasks.get(i).getTaskCoworker()),3,i+1);
-                display_area.add(new Label(tasks.get(i).getTaskSituation()),4,i+1);
-                display_area.add(new Label(tasks.get(i).getComments()),5,i+1);
-            } 
+            for (int i = 0; i < tasks.size(); i++)
+                displayLine(i);
         });
+        
+        button_new.setOnAction(e->{
+            tasks.add(new Task(
+                    tasks.size(),
+                    getContent(grid_input,0,1),
+                    getContent(grid_input,1,1),
+                    getContent(grid_input,2,1),
+                    getContent(grid_input,3,1),
+                    getContent(grid_input,4,1),
+                    "",
+                    getContent(grid_input,5,1)
+            ));
+            displayLine(tasks.size()-1);
+        });
+        
+        button_exit.setOnAction(e->{
+            try {
+                writeFile(file,tasks);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.exit(0);
+        });
+        
     }    
     
 }

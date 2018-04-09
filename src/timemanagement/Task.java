@@ -16,7 +16,7 @@ public class Task {
     private String taskDueDate;
     private String taskCoworker;
     private String taskSituation;
-    private String taskFinshDate;
+    private String taskFinishDate;
     private String comments;
     
     Task(int id, String description, String category, String dueDate, String coworker, String situation, String finishDate, String comments) {
@@ -26,7 +26,7 @@ public class Task {
         this.taskDueDate=dueDate;
         this.taskCoworker=coworker;
         this.taskSituation=situation;
-        this.taskFinshDate=finishDate;
+        this.taskFinishDate=finishDate;
         this.comments=comments;
     }
 
@@ -48,6 +48,10 @@ public class Task {
 
     public String getTaskSituation() {
         return taskSituation;
+    }
+    
+    public String getTaskFinishDate() {
+        return taskFinishDate;
     }
 
     public String getComments() {

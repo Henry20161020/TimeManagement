@@ -7,6 +7,7 @@ package timemanagement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -23,10 +24,29 @@ public class FileController {
         Scanner scan = new Scanner(file);
         ArrayList<Task> tasks=new ArrayList<>();
         while (scan.hasNext()){
-            String[] result=(scan.nextLine()+"|end").split(Pattern.quote("|"));
+            String[] result=(scan.nextLine()+"end|").split(Pattern.quote("|"));
             tasks.add(new Task(Integer.parseInt(result[0]),result[1],result[2],result[3],result[4],result[5],result[6],result[7]));
         }
+        scan.close();
         return tasks;
+    }
+    
+    public static void writeFile(File file, ArrayList<Task> tasks) throws FileNotFoundException {
+        PrintWriter pw=new PrintWriter(file);
+        for (int i = 0; i < tasks.size(); i++) {
+            pw.printf("%d|%s|%s|%s|%s|%s|%s|%s|\n", 
+                i,
+                tasks.get(i).getTaskDescription(),
+                tasks.get(i).getTaskCategory(),
+                tasks.get(i).getTaskDueDate(),
+                tasks.get(i).getTaskCoworker(),
+                tasks.get(i).getTaskSituation(),
+                tasks.get(i).getTaskFinishDate(),
+                tasks.get(i).getComments()
+                );
+        }
+        pw.close();
+  
     }
     
   
