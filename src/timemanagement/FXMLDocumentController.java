@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +27,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import static timemanagement.FileController.readFile;
@@ -37,26 +41,37 @@ import static timemanagement.FileController.writeFile;
 public class FXMLDocumentController implements Initializable {
     
     @FXML GridPane display_area, search_box, grid_input;
-    @FXML Button display,button_new,button_exit;
+    @FXML Button display,button_new,button_exit,button_save;
     @FXML ListView category_list;
 
     private File file=new File("test.txt");
     private ArrayList<Task> tasks=new ArrayList<>();
     private ArrayList<Integer> indexes=new ArrayList<>();
+    private int currentTask;
 
     private void displayHeader(String[] h) {
-        for (int i = 0; i < 6; i++) {
-            display_area.add(new Label(h[i]),i,0);
+        for (int i = 0; i < 7; i++) {
+            Label label=new Label(h[i]);
+            label.setFont(Font.font("Arial",FontWeight.BOLD,15));
+            display_area.add(label,i,0);
+            display_area.setHalignment(label, HPos.CENTER);
         }
     }
     
     private void displayLine(int taskNumber) {
-        display_area.add(new Label(tasks.get(taskNumber).getTaskDescription()),0,taskNumber+1);
-        display_area.add(new Label(tasks.get(taskNumber).getTaskCategory()),1,taskNumber+1);
-        display_area.add(new Label(tasks.get(taskNumber).getTaskDueDate()),2,taskNumber+1);
-        display_area.add(new Label(tasks.get(taskNumber).getTaskCoworker()),3,taskNumber+1);
-        display_area.add(new Label(tasks.get(taskNumber).getTaskSituation()),4,taskNumber+1);
-        display_area.add(new Label(tasks.get(taskNumber).getComments()),5,taskNumber+1);
+        Button button=new Button();
+        button.setOnAction(e->{
+            Node source = (Node)e.getSource();
+            currentTask=display_area.getRowIndex(source)-1;
+            show(grid_input);
+        });
+        display_area.add(button, 0, taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskDescription()),1,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskCategory()),2,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskDueDate()),3,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskCoworker()),4,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getTaskSituation()),5,taskNumber+1);
+        display_area.add(new Label(tasks.get(taskNumber).getComments()),6,taskNumber+1);
     }
 //    private void updateList(ListView selectionList) {
 //        ArrayList<String> list = new ArrayList<>();
@@ -67,20 +82,49 @@ public class FXMLDocumentController implements Initializable {
 //    }
     
     private String getContent(GridPane grid, int row, int col) {
-        System.out.println(grid.getChildren());
-        for(Node node: grid.getChildren()) {
-            System.out.println(node);
-            System.out.println(grid.getColumnIndex(node));
-            System.out.println(grid.getRowIndex(node));
+        for(Node node: grid.getChildren()) 
             if (node instanceof TextField && grid.getColumnIndex(node)==col && grid.getRowIndex(node)==row )
-                return ((TextField)node).getText();}
+                return ((TextField)node).getText();
         return "N/A";
     }
+    
+    private void show(GridPane grid) {
+        showContent(grid,0,1,tasks.get(currentTask).getTaskDescription());
+        showContent(grid,1,1,tasks.get(currentTask).getTaskCategory());
+        showContent(grid,2,1,tasks.get(currentTask).getTaskDueDate());
+        showContent(grid,3,1,tasks.get(currentTask).getTaskCoworker());
+        showContent(grid,4,1,tasks.get(currentTask).getTaskSituation());
+        showContent(grid,5,1,tasks.get(currentTask).getComments());
+        
+    }
+    
+    private void showContent(GridPane grid, int row, int col, String content) {
+        for(Node node: grid.getChildren()) 
+            if (node instanceof TextField && grid.getColumnIndex(node)==col && grid.getRowIndex(node)==row )
+                ((TextField)node).setText(content);
+    }
+    
+    private void updateTasks(ArrayList<Task> tasks){
+        Task task=tasks.get(currentTask);
+        task.setTaskDescription(getContent(grid_input,0,1));
+        task.setTaskCategory(getContent(grid_input,1,1));
+        task.setTaskDueDate(getContent(grid_input,2,1));
+        task.setTaskCoworker(getContent(grid_input,3,1));
+        task.setTaskSituation(getContent(grid_input,4,1));
+        task.setComments(getContent(grid_input,5,1));
+        showContent(display_area,currentTask+1,1,task.getTaskDescription());
+        showContent(display_area,currentTask+1,2,task.getTaskCategory());
+        showContent(display_area,currentTask+1,3,task.getTaskDueDate());
+        showContent(display_area,currentTask+1,4,task.getTaskCoworker());
+        showContent(display_area,currentTask+1,5,task.getTaskSituation());
+        showContent(display_area,currentTask+1,6,task.getComments());
+    }
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        String[] header={"Description","Category","Due Date","Coworker", "Situation","Comments"};
+        String[] header={"#","Description","Category","Due Date","Coworker", "Situation","Comments"};
         displayHeader(header);
 
         try {
@@ -109,6 +153,10 @@ public class FXMLDocumentController implements Initializable {
                     getContent(grid_input,5,1)
             ));
             displayLine(tasks.size()-1);
+        });
+        
+        button_save.setOnAction(e->{
+            updateTasks(tasks);
         });
         
         button_exit.setOnAction(e->{

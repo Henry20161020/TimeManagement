@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.3556851311953353" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timemanagement.FXMLDocumentController">
+<SplitPane dividerPositions="0.3556851311953353" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1080.0" style="-fx-background-color: #e1f5fe;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timemanagement.FXMLDocumentController">
   <items>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="766.0" prefWidth="264.0">
          <children>
             <SplitPane dividerPositions="0.6788511749347258" orientation="VERTICAL" prefHeight="768.0" prefWidth="380.0">
               <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #e1f5fe;">
                      <children>
                         <GridPane fx:id="grid_input" layoutX="14.0" layoutY="14.0" prefHeight="372.0" prefWidth="264.0">
                           <columnConstraints>
@@ -45,9 +46,10 @@
                            </children>
                         </GridPane>
                         <Button fx:id="button_new" layoutX="146.0" layoutY="430.0" mnemonicParsing="false" text="New" />
-                        <Button fx:id="button_exit" layoutX="252.0" layoutY="430.0" mnemonicParsing="false" text="Exit" />
+                        <Button fx:id="button_exit" layoutX="227.0" layoutY="430.0" mnemonicParsing="false" text="Exit" />
+                        <Button fx:id="button_save" layoutX="186.0" layoutY="430.0" mnemonicParsing="false" text="Save" />
                      </children></AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #e1f5fe;">
                      <children>
                         <GridPane fx:id="search_box" layoutX="20.0" layoutY="14.0">
                           <columnConstraints>
@@ -81,25 +83,26 @@
               </items>
             </SplitPane>
          </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="640.0" prefWidth="692.0" style="-fx-background-color: #e1f5fe;">
          <children>
-            <ScrollPane layoutY="1.0" prefHeight="766.0" prefWidth="692.0">
+            <ScrollPane layoutY="-1.0" prefHeight="768.0" prefWidth="692.0" style="-fx-background-color: #e1f5fe;">
                <content>
-                  <GridPane fx:id="display_area" prefHeight="157.0" prefWidth="694.0">
+                  <GridPane fx:id="display_area" gridLinesVisible="true" prefHeight="756.0" prefWidth="688.0" style="-fx-background-color: #e1f5fe; -fx-border-width: 0.25px;">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="2.0" prefWidth="200.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="65.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="17.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="2.0" prefWidth="218.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="78.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="70.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="70.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="162.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="53.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="72.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="150.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                     </rowConstraints>
+                     <padding>
+                        <Insets left="5.0" right="5.0" top="15.0" />
+                     </padding>
                   </GridPane>
                </content>
             </ScrollPane>
