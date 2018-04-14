@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This file is main entrance to launch the program and load FXMLDocument.fxml
+ * @author henry
  */
 package timemanagement;
 
@@ -11,10 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- *
- * @author henry
- */
+
 public class TimeManagement extends Application {
     
     @Override

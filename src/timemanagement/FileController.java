@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -32,23 +34,22 @@ public class FileController {
         return tasks;
     }
     
-        public static void writeJournal(File file, Task task) throws FileNotFoundException {
+    public static void writeJournal(File file, Task task, Date startTime, Date endTime) throws FileNotFoundException {
 //        PrintWriter pw=new PrintWriter(file);
-        
-        PrintWriter pw = new PrintWriter(new FileOutputStream(new File("persons.txt"),true /* append = true */)); 
-            pw.printf("%d|%s|%s|%s|%s|%s|%s|%s|\n", 
-                1,
-                task.getTaskDescription(),
-                task.getTaskCategory(),
-                task.getTaskDueDate(),
-                task.getTaskCoworker(),
-                task.getTaskSituation(),
-                task.getTaskFinishDate(),
-                task.getComments()
-                );
+        String str_st="",str_et="";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+        str_st=sdf.format(startTime);
+        str_et=sdf.format(endTime);
+        PrintWriter pw = new PrintWriter(new FileOutputStream(file,true /* append = true */)); 
+        pw.printf("%s|%s|%s|%s|%s|\n", 
+            str_st,
+            str_et,
+            task.getTaskDescription(),
+            task.getTaskCategory(),
+            task.getComments()
+            );
         
         pw.close();
-  
     }
     
     public static void writeFile(File file, ArrayList<Task> tasks) throws FileNotFoundException {

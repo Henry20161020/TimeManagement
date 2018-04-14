@@ -10,14 +10,14 @@ package timemanagement;
  * @author henry
  */
 public class Task {
-    private int taskId;
-    private String taskDescription;
-    private String taskCategory;
-    private String taskDueDate;
-    private String taskCoworker;
-    private String taskSituation;
-    private String taskFinishDate;
-    private String comments;
+    private int taskId=0;
+    private String taskDescription="";
+    private String taskCategory="";
+    private String taskDueDate="";
+    private String taskCoworker="";
+    private String taskSituation="";
+    private String taskFinishDate="";
+    private String comments="";
 
     public void setTaskId(int taskId) {
         this.taskId = taskId;
@@ -50,7 +50,8 @@ public class Task {
     public void setComments(String comments) {
         this.comments = comments;
     }
-
+    Task() {
+    }
     
     Task(int id, String description, String category, String dueDate, String coworker, String situation, String finishDate, String comments) {
         this.taskId=id;

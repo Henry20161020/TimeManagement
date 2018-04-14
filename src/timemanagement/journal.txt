@@ -1,0 +1,9 @@
+201804141106|201804141106|||test|
+201804141109|201804141109|||test2|
+201804141113|201804141113|Sheridan|Daily routine|test3|
+201804141117|201804141117|co-op application|Sheridan|test 4|
+201804141131|201804141131|politics Case Study 2|Sheridan|test5|
+201804141159|201804141159|contact lense|Daily routine|test6
+start|
+201804141216|201804141216|tax report|Daily routine|test7&LFnew line|
+201804141236|201804141236|politics Case Study 2|Sheridan|test8&LFdd&LF|

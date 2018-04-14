@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This file is to control FXMLDocument.fxml
+ * @author henry
  */
 package timemanagement;
 
@@ -26,6 +25,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -36,26 +36,34 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 import static timemanagement.FileController.readFile;
 import static timemanagement.FileController.writeFile;
 
-/**
- *
- * @author henry
- */
 public class FXMLDocumentController implements Initializable {
-    
+    /*the three grid pane, display_area at right, grid_input at top left, search_box at bottom left*/
     @FXML GridPane display_area, search_box, grid_input;
-    @FXML Button display,button_new,button_exit,button_save,button_delete,button_pomodoro;
+    /*buttons at the top left area*/
+    @FXML Button button_new,button_exit,button_save,button_delete,button_pomodoro,button_clear;
+    /*listview for choosing filtering criteria*/
     @FXML ListView category_list;
-
-    private File file=new File("test.txt");
+    /*the scroll pane at right area and the parent of the grid pane display_area*/
+    @FXML private ScrollPane scrollpane;
+    /*all tasks are stored in task.txt*/
+    private File file=new File("task.txt");
+    /*The data will read from file to the ArrayList below*/
     private ArrayList<Task> tasks=new ArrayList<>();
-    private ArrayList<Integer> indexes=new ArrayList<>();
-    private int currentTask;
+    /**
+     *The global variable in this controller for the index of current task, -1 means
+     *that no task is selected
+     */
+    private int currentTask=-1;
+    /*This String is used in the header of the display area*/
     private String[] header={"#","Description","Category","Due Date","Coworker", "Situation","Comments"};
+    /*val instance is used to validate the input data*/
+    private Validator val=new Validator();
 
-
+    /*This method is to display the header*/
     private void displayHeader(String[] h) {
         for (int i = 0; i < 7; i++) {
             Label label=new Label(h[i]);
@@ -65,6 +73,10 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
+    /**
+     * This method is to display one line for each task
+     * Each line consists of one control button and 6 labels
+     */
     private void displayLine(int taskNumber) {
         Button button=new Button();
         button.setOnAction(e->{
@@ -80,20 +92,22 @@ public class FXMLDocumentController implements Initializable {
         display_area.add(new Label(tasks.get(taskNumber).getTaskSituation()),5,taskNumber+1);
         display_area.add(new Label(tasks.get(taskNumber).getComments()),6,taskNumber+1);
     }
-//    private void updateList(ListView selectionList) {
-//        ArrayList<String> list = new ArrayList<>();
-//        for (Task task : tasks)
-//            for (String item: list)
-//                if (item.equals(task.))
-//        selectionList.getItems().addAll(list);
-//    }
     
+    /** 
+     * This method is to get the text content from the input grid pane
+     * at the specified row and column number
+     */
     private String getContent(GridPane grid, int row, int col) {
         for(Node node: grid.getChildren()) 
             if (node instanceof TextField && grid.getColumnIndex(node)==col && grid.getRowIndex(node)==row )
                 return ((TextField)node).getText();
         return "N/A";
     }
+    
+    /**
+     * This method is to show the details of current task at input grid pane
+     * for further actions such as update or delete
+     */
     
     private void show(GridPane grid) {
         showTextField(grid,0,1,tasks.get(currentTask).getTaskDescription());
@@ -105,6 +119,10 @@ public class FXMLDocumentController implements Initializable {
         
     }
     
+    /**
+     * This method is to display text at the specific text field in the grid pane
+     * with the specified row and column number
+    */
     private void showTextField(GridPane grid, int row, int col, String content) {
         for(Node node: grid.getChildren()) 
             if (node instanceof TextField && grid.getColumnIndex(node)==col && grid.getRowIndex(node)==row )
@@ -130,15 +148,21 @@ public class FXMLDocumentController implements Initializable {
     private void load(String xml, Task task) throws IOException {
         try{
             Scene scene;
-            FXMLLoader loader=new FXMLLoader();
-            Pane root = (Pane)loader.load(getClass().getResource(xml));
+//            Pane root = (Pane)FXMLLoader.load(getClass().getResource(xml));
+            FXMLLoader loader=new FXMLLoader(getClass().getResource(xml));
+            Pane root = (Pane)loader.load();
             PomodoroController pomodoro=loader.getController();
+            System.out.println();
+            System.out.println(task);
             pomodoro.setTask(task);
+
             scene = new Scene(root,600,400);
             Stage secondStage = new Stage();
+            secondStage.setTitle("Pomodoro Timer");
             secondStage.setScene(scene);
             secondStage.initModality(Modality.APPLICATION_MODAL);  // Use this to make the 2nd window modal (must close 2nd window to return to main window)
             secondStage.showAndWait();
+
         }
         catch(Exception e) {
             e.printStackTrace();    
@@ -154,9 +178,18 @@ public class FXMLDocumentController implements Initializable {
             displayLine(i); 
     }
     
+    private boolean validate(GridPane grid, char delimiter) {
+        for (int i = 0; i < 6; i++) 
+            if (val.containDelimiter(getContent(grid_input,i,1), delimiter)) return false;
+        return true;    
+    }
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        scrollpane.setContent(display_area);
+        scrollpane.setFitToHeight(true);
         displayHeader(header);
 
         try {
@@ -164,17 +197,16 @@ public class FXMLDocumentController implements Initializable {
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        for (int i = 0; i < tasks.size(); i++)
+            displayLine(i);
 //        ArrayList<String> list=new ArrayList<>();
 //        for (Node node: search_box.getChildren()) {
 //            if(search_box.getColumnIndex(node)==1) updateList((ListView)node);
 //        }
-        display.setOnAction(e->{
-            for (int i = 0; i < tasks.size(); i++)
-                displayLine(i);
-        });
         
         button_new.setOnAction(e->{
-            tasks.add(new Task(
+            if (validate(grid_input,'|')) {
+                tasks.add(new Task(
                     tasks.size(),
                     getContent(grid_input,0,1),
                     getContent(grid_input,1,1),
@@ -183,13 +215,21 @@ public class FXMLDocumentController implements Initializable {
                     getContent(grid_input,4,1),
                     "",
                     getContent(grid_input,5,1)
-            ));
-            displayLine(tasks.size()-1);
+                ));
+                displayLine(tasks.size()-1);
+            } else
+                JOptionPane.showMessageDialog(null,  "Character '|' is not allowed","Error", JOptionPane.ERROR_MESSAGE);
         });
         
         button_save.setOnAction(e->{
-            updateTasks(tasks);
-            refresh();
+            if (currentTask>=0 && currentTask<tasks.size()) {
+                if (validate(grid_input,'|')){
+                    updateTasks(tasks);
+                    refresh();
+                } else 
+                    JOptionPane.showMessageDialog(null, "Character '|' is not allowed", "Error", JOptionPane.ERROR_MESSAGE);
+            } else
+                JOptionPane.showMessageDialog(null, "You have to choose a task first","Error",  JOptionPane.ERROR_MESSAGE);
         });
         
         button_exit.setOnAction(e->{
@@ -202,17 +242,28 @@ public class FXMLDocumentController implements Initializable {
         });
         
         button_delete.setOnAction(e->{
-            tasks.remove(currentTask);
-            refresh();
-//            display_area.setGridLinesVisible(true);
+            if (currentTask>=0 && currentTask<tasks.size()) {
+                tasks.remove(currentTask);
+                refresh();
+            } else
+                JOptionPane.showMessageDialog(null, "You have to choose a task first","Error",  JOptionPane.ERROR_MESSAGE);
         });
         
         button_pomodoro.setOnAction(e->{
-            try {
-                load("Pomodoro.fxml",tasks.get(currentTask));
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
+            if (currentTask>=0 && currentTask<tasks.size()) 
+                try {
+                    load("Pomodoro.fxml",tasks.get(currentTask));
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            else
+                JOptionPane.showMessageDialog(null, "You have to choose a task first","Error",  JOptionPane.ERROR_MESSAGE);
+        });
+        
+        button_clear.setOnAction(e->{
+            for (int i = 0; i < 6; i++) 
+                showTextField(grid_input,i,1,"");
         });
         
     }    

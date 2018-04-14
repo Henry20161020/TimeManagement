@@ -22,5 +22,6 @@
             <Font size="28.0" />
          </font></Label>
       <TextArea fx:id="textarea_comment" layoutX="175.0" layoutY="270.0" prefHeight="103.0" prefWidth="251.0" />
+      <Button fx:id="button_write" layoutX="455.0" layoutY="309.0" mnemonicParsing="false" text="Write to Journal" />
    </children>
 </AnchorPane>
