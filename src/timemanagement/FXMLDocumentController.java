@@ -7,6 +7,7 @@ package timemanagement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,20 +17,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import static timemanagement.FileController.readFile;
 import static timemanagement.FileController.writeFile;
@@ -41,13 +46,15 @@ import static timemanagement.FileController.writeFile;
 public class FXMLDocumentController implements Initializable {
     
     @FXML GridPane display_area, search_box, grid_input;
-    @FXML Button display,button_new,button_exit,button_save;
+    @FXML Button display,button_new,button_exit,button_save,button_delete,button_pomodoro;
     @FXML ListView category_list;
 
     private File file=new File("test.txt");
     private ArrayList<Task> tasks=new ArrayList<>();
     private ArrayList<Integer> indexes=new ArrayList<>();
     private int currentTask;
+    private String[] header={"#","Description","Category","Due Date","Coworker", "Situation","Comments"};
+
 
     private void displayHeader(String[] h) {
         for (int i = 0; i < 7; i++) {
@@ -89,19 +96,25 @@ public class FXMLDocumentController implements Initializable {
     }
     
     private void show(GridPane grid) {
-        showContent(grid,0,1,tasks.get(currentTask).getTaskDescription());
-        showContent(grid,1,1,tasks.get(currentTask).getTaskCategory());
-        showContent(grid,2,1,tasks.get(currentTask).getTaskDueDate());
-        showContent(grid,3,1,tasks.get(currentTask).getTaskCoworker());
-        showContent(grid,4,1,tasks.get(currentTask).getTaskSituation());
-        showContent(grid,5,1,tasks.get(currentTask).getComments());
+        showTextField(grid,0,1,tasks.get(currentTask).getTaskDescription());
+        showTextField(grid,1,1,tasks.get(currentTask).getTaskCategory());
+        showTextField(grid,2,1,tasks.get(currentTask).getTaskDueDate());
+        showTextField(grid,3,1,tasks.get(currentTask).getTaskCoworker());
+        showTextField(grid,4,1,tasks.get(currentTask).getTaskSituation());
+        showTextField(grid,5,1,tasks.get(currentTask).getComments());
         
     }
     
-    private void showContent(GridPane grid, int row, int col, String content) {
+    private void showTextField(GridPane grid, int row, int col, String content) {
         for(Node node: grid.getChildren()) 
             if (node instanceof TextField && grid.getColumnIndex(node)==col && grid.getRowIndex(node)==row )
                 ((TextField)node).setText(content);
+    }
+    
+    private void showLabel(GridPane grid, int row, int col, String content) {
+        for(Node node: grid.getChildren()) 
+            if (node instanceof Label && grid.getColumnIndex(node)==col && grid.getRowIndex(node)==row )
+                ((Label)node).setText(content);
     }
     
     private void updateTasks(ArrayList<Task> tasks){
@@ -112,19 +125,38 @@ public class FXMLDocumentController implements Initializable {
         task.setTaskCoworker(getContent(grid_input,3,1));
         task.setTaskSituation(getContent(grid_input,4,1));
         task.setComments(getContent(grid_input,5,1));
-        showContent(display_area,currentTask+1,1,task.getTaskDescription());
-        showContent(display_area,currentTask+1,2,task.getTaskCategory());
-        showContent(display_area,currentTask+1,3,task.getTaskDueDate());
-        showContent(display_area,currentTask+1,4,task.getTaskCoworker());
-        showContent(display_area,currentTask+1,5,task.getTaskSituation());
-        showContent(display_area,currentTask+1,6,task.getComments());
     }
     
+    private void load(String xml, Task task) throws IOException {
+        try{
+            Scene scene;
+            FXMLLoader loader=new FXMLLoader();
+            Pane root = (Pane)loader.load(getClass().getResource(xml));
+            PomodoroController pomodoro=loader.getController();
+            pomodoro.setTask(task);
+            scene = new Scene(root,600,400);
+            Stage secondStage = new Stage();
+            secondStage.setScene(scene);
+            secondStage.initModality(Modality.APPLICATION_MODAL);  // Use this to make the 2nd window modal (must close 2nd window to return to main window)
+            secondStage.showAndWait();
+        }
+        catch(Exception e) {
+            e.printStackTrace();    
+        }
+    }
+    
+    private void refresh() {
+        Node node=display_area.getChildren().get(0);
+        display_area.getChildren().clear();
+        display_area.getChildren().add(node);
+        displayHeader(header);
+        for (int i = 0; i < tasks.size(); i++)
+            displayLine(i); 
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        String[] header={"#","Description","Category","Due Date","Coworker", "Situation","Comments"};
         displayHeader(header);
 
         try {
@@ -157,6 +189,7 @@ public class FXMLDocumentController implements Initializable {
         
         button_save.setOnAction(e->{
             updateTasks(tasks);
+            refresh();
         });
         
         button_exit.setOnAction(e->{
@@ -166,6 +199,20 @@ public class FXMLDocumentController implements Initializable {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.exit(0);
+        });
+        
+        button_delete.setOnAction(e->{
+            tasks.remove(currentTask);
+            refresh();
+//            display_area.setGridLinesVisible(true);
+        });
+        
+        button_pomodoro.setOnAction(e->{
+            try {
+                load("Pomodoro.fxml",tasks.get(currentTask));
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
     }    

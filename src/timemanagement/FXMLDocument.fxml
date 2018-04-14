@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.3556851311953353" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1080.0" style="-fx-background-color: #e1f5fe;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timemanagement.FXMLDocumentController">
+<SplitPane dividerPositions="0.3556851311953353" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1080.0" style="-fx-background-color: #e1f5fe;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timemanagement.FXMLDocumentController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="766.0" prefWidth="264.0">
          <children>
@@ -46,8 +46,10 @@
                            </children>
                         </GridPane>
                         <Button fx:id="button_new" layoutX="146.0" layoutY="430.0" mnemonicParsing="false" text="New" />
-                        <Button fx:id="button_exit" layoutX="227.0" layoutY="430.0" mnemonicParsing="false" text="Exit" />
+                        <Button fx:id="button_exit" layoutX="278.0" layoutY="430.0" mnemonicParsing="false" text="Exit" />
                         <Button fx:id="button_save" layoutX="186.0" layoutY="430.0" mnemonicParsing="false" text="Save" />
+                        <Button fx:id="button_delete" layoutX="227.0" layoutY="430.0" mnemonicParsing="false" text="Delete" />
+                        <Button fx:id="button_pomodoro" layoutX="146.0" layoutY="470.0" mnemonicParsing="false" text="Pomodoro" />
                      </children></AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #e1f5fe;">
                      <children>

@@ -23,4 +23,4 @@
 22|network Act4|Sheridan|20180328|||||
 23|politics Case Study 2|Sheridan|20180417|||||
 24|revision|Sheridan|||||java, linux|
-25|1-888-837-1451 reliance|saving|ASAP||phone|||
+25|1-888-837-1451 reliance|saving|||phone|||

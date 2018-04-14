@@ -7,6 +7,7 @@ package timemanagement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,25 @@ public class FileController {
         }
         scan.close();
         return tasks;
+    }
+    
+        public static void writeJournal(File file, Task task) throws FileNotFoundException {
+//        PrintWriter pw=new PrintWriter(file);
+        
+        PrintWriter pw = new PrintWriter(new FileOutputStream(new File("persons.txt"),true /* append = true */)); 
+            pw.printf("%d|%s|%s|%s|%s|%s|%s|%s|\n", 
+                1,
+                task.getTaskDescription(),
+                task.getTaskCategory(),
+                task.getTaskDueDate(),
+                task.getTaskCoworker(),
+                task.getTaskSituation(),
+                task.getTaskFinishDate(),
+                task.getComments()
+                );
+        
+        pw.close();
+  
     }
     
     public static void writeFile(File file, ArrayList<Task> tasks) throws FileNotFoundException {
